@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <link rel="icon" href="logo.svg">
+        <script>
+        // REGISTER ERROR OVERLAY
+        var hasError = null
+        const showErrorOverlay = err => {
+            // must be within function call because that's when the element is defined for sure.
+            const ErrorOverlay = customElements.get('vite-error-overlay')
+            console.log(err)
+            // don't open outside vite environment
+            if (!ErrorOverlay || hasError) {return}
+            hasError = true
+            const overlay = new ErrorOverlay(err)
+            document.body.appendChild(overlay)
+        }
+
+        window.addEventListener('error', showErrorOverlay)
+        window.addEventListener('unhandledrejection', ({reason}) => showErrorOverlay(reason))
+        </script>
+
+        <script defer type="module" src="/src/client.js">
+        </script>
+        <style>
+            body {
+                font-family: monospace;
+                background: black;
+                color: white;
+            }
+            .has-suggestion {
+                cursor: pointer;
+            }
+            .message-span {
+                color: var(--color);
+                position: relative;
+            }
+            .has-suggestion {
+                position: relative;
+            }
+            .has-suggestion:hover {
+                color: black;
+            }
+            .has-suggestion:hover::after {
+                opacity: 1;
+            }
+            .has-suggestion::after {
+                top: 0;
+                left: 0;
+                content: '';
+                display: block;
+                position: absolute;
+                opacity: 0.2;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                background-color: var(--color, cyan);
+            }
+        </style>
+    </head>
+    <body>
+        <div id = "app">
+        </div>
+    </body>
+</html>
