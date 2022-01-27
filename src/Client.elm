@@ -89,11 +89,23 @@ viewReport r =
     case r of
         Model.NoMain -> Html.pre [] [Html.text "Main file not found.\nUse ELM_MAIN=src/MyMain.elm if src/Main.elm does not exist."]
         Model.Compiled -> Html.div [] [Html.text "COMPILED"]
-        Model.Errored errors ->
-            errors
-            |> List.sortBy .path
-            |> List.map viewError
-            |> Html.div []
+        Model.Errored erroredModules ->
+            let
+                viewErros = erroredModules
+                    |> List.sortBy .path
+                    |> List.map viewError
+                    |> Html.div [
+                        Html.Attributes.style "background" "#111"
+                      , Html.Attributes.style "padding" "10px"
+                    ]
+            in
+                Html.div [] [
+                      Html.text "Bad, bad modules: ["
+                    , List.length erroredModules |> String.fromInt |> Html.text
+                    , Html.text "] "
+                    , List.length erroredModules |> \n -> List.repeat n "▼" |> String.join " " |> Html.text
+                    , viewErros
+                ]
 
 viewError : Model.CompileError -> Html.Html Msg
 viewError ({problems, name, path} as file) =
@@ -108,9 +120,17 @@ viewError ({problems, name, path} as file) =
             |> List.map ((\p -> viewProblem file p |> Html.map (Main.applySuggestion file p >> SuggestionChosen)))
     in
     Html.div [] [
-        Html.div [] [Html.text name]
-      , Html.h3 [] [Html.text path]
-      , Html.div [] renderedProblems
+        Html.div [] [Html.text name
+            , Html.text " ["
+            , List.length problems |> String.fromInt |> Html.text
+            , Html.text "] "
+            , List.length problems |> \n -> List.repeat n "⬤" |> String.join " " |> Html.text
+            ]
+      -- , Html.h3 [] [Html.text path]
+      , Html.div [
+        Html.Attributes.style "border-bottom" "1px solid white"
+      , Html.Attributes.style "margin-bottom" "10px"
+      ] renderedProblems
     ]
 
 viewProblem : Model.CompileError -> Model.Problem -> Html.Html Model.Suggestion
@@ -121,7 +141,11 @@ viewProblem error p =
             |> List.map (viewMessageLine error p)
             |> Html.pre []
     in
-    Html.div [] [
+    Html.div [
+        Html.Attributes.style "border-left" "1px solid white"
+      , Html.Attributes.style "padding-left" "10px"
+      , Html.Attributes.style "margin-top" "10px"
+    ] [
         Html.h3 [] [Html.text (Debug.toString p.type_) ]
       , details
     ]
@@ -149,6 +173,8 @@ viewMessageLine error problem l =
             |> List.map (\(subString, sug) ->
                 Html.span (case sug of
                     Nothing -> []
-                    Just s -> [Html.Attributes.title (Debug.toString s), Html.Attributes.class "has-suggestion" , Html.Events.onClick s]) [Html.text subString]
+                    Just s -> [Html.Attributes.title (Debug.toString s), Html.Attributes.class "has-suggestion" , Html.Events.onClick s]) [
+                        Html.span [] [Html.text subString]
+                        ]
                 )
             |> Html.span style

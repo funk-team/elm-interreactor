@@ -24,8 +24,17 @@
         <style>
             body {
                 font-family: monospace;
-                background: black;
+                background: #222;
                 color: white;
+            }
+            h1 {
+                margin: 0
+            }
+            h2 {
+                margin: 0
+            }
+            h3 {
+                margin: 0
             }
             .has-suggestion {
                 cursor: pointer;
@@ -43,6 +52,10 @@
             .has-suggestion:hover::after {
                 opacity: 1;
             }
+            .has-suggestion > span {
+                position: relative;
+                z-index: 100;
+            }
             .has-suggestion::after {
                 top: 0;
                 left: 0;
@@ -50,7 +63,6 @@
                 display: block;
                 position: absolute;
                 opacity: 0.2;
-                z-index: -1;
                 width: 100%;
                 height: 100%;
                 background-color: var(--color, cyan);

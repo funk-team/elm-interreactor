@@ -317,6 +317,8 @@ findFixForMessage error problem message =
             Nothing
         UnfinishedRecordType ->
             Nothing
+        Other str ->
+            Nothing
 
 suggestEqualsSign problem message =
     let

@@ -48,6 +48,7 @@ type ProblemType =
     | ProblemInExposing
     | UnfinishedRecordType
     | UnfinishedParentheses
+    | Other String
 
 
 type alias Application =
@@ -134,55 +135,58 @@ decodeProblem =
          ( Decode.field "message" (Decode.list decodeMessagePart) )
 
 decodeProblemType =
-   let
-      recover x =
-         case x of
-            "ModuleNameMismatch"->
-               Decode.succeed ModuleNameMismatch
-            "ModuleNotFound"->
-               Decode.succeed ModuleNotFound
-            "NamingError"->
-               Decode.succeed NamingError
-            "TooManyArgs"->
-               Decode.succeed TooManyArgs
-            "TooFewArgs"->
-               Decode.succeed TooFewArgs
-            "MissingArrow"->
-               Decode.succeed MissingArrow
-            "MissingPattern"->
-               Decode.succeed MissingPattern
-            "RedundantPattern"->
-               Decode.succeed RedundantPattern
-            "TypeMismatch"->
-               Decode.succeed TypeMismatch
-            "UnfinishedLet"->
-               Decode.succeed UnfinishedLet
-            "ProblemInRecord"->
-               Decode.succeed ProblemInRecord
-            "ProblemInDefinition"->
-               Decode.succeed ProblemInDefinition
-            "ProblemInTypeAlias"->
-               Decode.succeed ProblemInTypeAlias
-            "UnfinishedDefinition"->
-               Decode.succeed UnfinishedDefinition
-            "UnboundTypeVariable"->
-               Decode.succeed UnboundTypeVariable
-            "Shadowing"->
-               Decode.succeed Shadowing
-            "WeirdDeclaration"->
-               Decode.succeed WeirdDeclaration
-            "MissingColon"->
-               Decode.succeed MissingColon
-            "ProblemInExposing"->
-               Decode.succeed ProblemInExposing
-            "UnfinishedRecordType"->
-               Decode.succeed UnfinishedRecordType
-            "UnfinishedParentheses"->
-               Decode.succeed UnfinishedParentheses
-            other->
-               Decode.fail <| "Unknown constructor for type ProblemType: " ++ other
-   in
-      Decode.string |> Decode.andThen recover
+   Decode.field "Constructor" Decode.string |> Decode.andThen decodeProblemTypeHelp
+
+decodeProblemTypeHelp constructor =
+   case constructor of
+      "ModuleNameMismatch" ->
+         Decode.succeed ModuleNameMismatch
+      "ModuleNotFound" ->
+         Decode.succeed ModuleNotFound
+      "NamingError" ->
+         Decode.succeed NamingError
+      "TooManyArgs" ->
+         Decode.succeed TooManyArgs
+      "TooFewArgs" ->
+         Decode.succeed TooFewArgs
+      "MissingArrow" ->
+         Decode.succeed MissingArrow
+      "MissingPattern" ->
+         Decode.succeed MissingPattern
+      "RedundantPattern" ->
+         Decode.succeed RedundantPattern
+      "TypeMismatch" ->
+         Decode.succeed TypeMismatch
+      "UnfinishedLet" ->
+         Decode.succeed UnfinishedLet
+      "ProblemInRecord" ->
+         Decode.succeed ProblemInRecord
+      "ProblemInDefinition" ->
+         Decode.succeed ProblemInDefinition
+      "ProblemInTypeAlias" ->
+         Decode.succeed ProblemInTypeAlias
+      "UnfinishedDefinition" ->
+         Decode.succeed UnfinishedDefinition
+      "UnboundTypeVariable" ->
+         Decode.succeed UnboundTypeVariable
+      "Shadowing" ->
+         Decode.succeed Shadowing
+      "WeirdDeclaration" ->
+         Decode.succeed WeirdDeclaration
+      "MissingColon" ->
+         Decode.succeed MissingColon
+      "ProblemInExposing" ->
+         Decode.succeed ProblemInExposing
+      "UnfinishedRecordType" ->
+         Decode.succeed UnfinishedRecordType
+      "UnfinishedParentheses" ->
+         Decode.succeed UnfinishedParentheses
+      "Other" ->
+         Decode.map
+            Other
+               ( Decode.field "A1" Decode.string )
+      other->
+         Decode.fail <| "Unknown constructor for type ProblemType: " ++ other
 
 decodeRegion =
    Decode.map2
@@ -269,47 +273,94 @@ encodeProblem a =
 encodeProblemType a =
    case a of
       ModuleNameMismatch ->
-         Encode.string "ModuleNameMismatch"
+         Encode.object
+            [ ("Constructor", Encode.string "ModuleNameMismatch")
+            ]
       ModuleNotFound ->
-         Encode.string "ModuleNotFound"
+         Encode.object
+            [ ("Constructor", Encode.string "ModuleNotFound")
+            ]
       NamingError ->
-         Encode.string "NamingError"
+         Encode.object
+            [ ("Constructor", Encode.string "NamingError")
+            ]
       TooManyArgs ->
-         Encode.string "TooManyArgs"
+         Encode.object
+            [ ("Constructor", Encode.string "TooManyArgs")
+            ]
       TooFewArgs ->
-         Encode.string "TooFewArgs"
+         Encode.object
+            [ ("Constructor", Encode.string "TooFewArgs")
+            ]
       MissingArrow ->
-         Encode.string "MissingArrow"
+         Encode.object
+            [ ("Constructor", Encode.string "MissingArrow")
+            ]
       MissingPattern ->
-         Encode.string "MissingPattern"
+         Encode.object
+            [ ("Constructor", Encode.string "MissingPattern")
+            ]
       RedundantPattern ->
-         Encode.string "RedundantPattern"
+         Encode.object
+            [ ("Constructor", Encode.string "RedundantPattern")
+            ]
       TypeMismatch ->
-         Encode.string "TypeMismatch"
+         Encode.object
+            [ ("Constructor", Encode.string "TypeMismatch")
+            ]
       UnfinishedLet ->
-         Encode.string "UnfinishedLet"
+         Encode.object
+            [ ("Constructor", Encode.string "UnfinishedLet")
+            ]
       ProblemInRecord ->
-         Encode.string "ProblemInRecord"
+         Encode.object
+            [ ("Constructor", Encode.string "ProblemInRecord")
+            ]
       ProblemInDefinition ->
-         Encode.string "ProblemInDefinition"
+         Encode.object
+            [ ("Constructor", Encode.string "ProblemInDefinition")
+            ]
       ProblemInTypeAlias ->
-         Encode.string "ProblemInTypeAlias"
+         Encode.object
+            [ ("Constructor", Encode.string "ProblemInTypeAlias")
+            ]
       UnfinishedDefinition ->
-         Encode.string "UnfinishedDefinition"
+         Encode.object
+            [ ("Constructor", Encode.string "UnfinishedDefinition")
+            ]
       UnboundTypeVariable ->
-         Encode.string "UnboundTypeVariable"
+         Encode.object
+            [ ("Constructor", Encode.string "UnboundTypeVariable")
+            ]
       Shadowing ->
-         Encode.string "Shadowing"
+         Encode.object
+            [ ("Constructor", Encode.string "Shadowing")
+            ]
       WeirdDeclaration ->
-         Encode.string "WeirdDeclaration"
+         Encode.object
+            [ ("Constructor", Encode.string "WeirdDeclaration")
+            ]
       MissingColon ->
-         Encode.string "MissingColon"
+         Encode.object
+            [ ("Constructor", Encode.string "MissingColon")
+            ]
       ProblemInExposing ->
-         Encode.string "ProblemInExposing"
+         Encode.object
+            [ ("Constructor", Encode.string "ProblemInExposing")
+            ]
       UnfinishedRecordType ->
-         Encode.string "UnfinishedRecordType"
+         Encode.object
+            [ ("Constructor", Encode.string "UnfinishedRecordType")
+            ]
       UnfinishedParentheses ->
-         Encode.string "UnfinishedParentheses"
+         Encode.object
+            [ ("Constructor", Encode.string "UnfinishedParentheses")
+            ]
+      Other a1->
+         Encode.object
+            [ ("Constructor", Encode.string "Other")
+            , ("A1", Encode.string a1)
+            ]
 
 encodeRegion a =
    Encode.object
@@ -339,8 +390,6 @@ encodeResolutionId a =
       , ("problemNumber", Encode.int a.problemNumber)
       ] 
 -- [generator-end]
-
-
 
 readProblem =
    Decode.map3
@@ -415,8 +464,11 @@ problemTypeReader =
             "UNFINISHED RECORD TYPE" -> Decode.succeed UnfinishedRecordType
             "UNFINISHED PARENTHESES" -> Decode.succeed UnfinishedParentheses
             "MISSING ARROW" -> Decode.succeed MissingArrow
-            other -> Decode.fail ("Problem type not recognized: " ++ other)
+            other -> Decode.succeed (Other other)
+            -- Decode.fail ("Problem type not recognized: " ++ other)
     )
+
+
 
 
 
