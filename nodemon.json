@@ -1,0 +1,5 @@
+{
+  "watch": ["tests", "src", "lib", "./index.*", "tests/elm-verify-examples.json"],
+  "ignore": ["tests/VerifyExamples", "dist", "elm-stuff"],
+  "ext": "elm,json,js,mjs"
+}

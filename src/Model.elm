@@ -23,6 +23,34 @@ type alias UpdateLineSuggestionParams =
     , with : String
     }
 
+
+problemTypeToString p =
+    case p of
+        ModuleNameMismatch -> " Module name mismatch"
+        ModuleNotFound -> " Module not found"
+        NamingError -> " Naming error"
+        TooManyArgs -> " Too many args"
+        TooFewArgs -> " Too few args"
+        MissingArrow -> " Missing arrow"
+        MissingPattern -> " Missing pattern"
+        RedundantPattern -> " Redundant pattern"
+        TypeMismatch -> " Type mismatch"
+        UnfinishedLet -> " Unfinished let"
+        ProblemInRecord -> " Problem in record"
+        ProblemInDefinition -> " Problem in definition"
+        ProblemInTypeAlias -> " Problem in type alias"
+        UnfinishedDefinition -> " Unfinished definition"
+        UnboundTypeVariable -> " Unbound type variable"
+        Shadowing -> " Shadowing"
+        WeirdDeclaration -> " Weird declaration"
+        MissingColon -> " Missing colon"
+        ProblemInExposing -> " Problem in exposing"
+        UnfinishedRecordType -> " Unfinished record type"
+        UnfinishedParentheses -> " Unfinished parentheses"
+        Other string -> string
+
+
+
 -- [generator-start]
 
 

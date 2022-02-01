@@ -66,7 +66,7 @@ view model =
         True ->
             case model.report of
                 Nothing -> Html.text "No report available. Wait for the compiler to finish."
-                Just (Err err) -> Html.text (Debug.toString err)
+                Just (Err err) -> Html.text (Decode.errorToString err)
                 Just (Ok r) -> viewReport r
 
 type Msg =
@@ -146,7 +146,7 @@ viewProblem error p =
       , Html.Attributes.style "padding-left" "10px"
       , Html.Attributes.style "margin-top" "10px"
     ] [
-        Html.h3 [] [Html.text (Debug.toString p.type_) ]
+        Html.h3 [] [Html.text (Model.problemTypeToString p.type_) ]
       , details
     ]
 
@@ -173,7 +173,7 @@ viewMessageLine error problem l =
             |> List.map (\(subString, sug) ->
                 Html.span (case sug of
                     Nothing -> []
-                    Just s -> [Html.Attributes.title (Debug.toString s), Html.Attributes.class "has-suggestion" , Html.Events.onClick s]) [
+                    Just s -> [{-Html.Attributes.title s, -} Html.Attributes.class "has-suggestion" , Html.Events.onClick s]) [
                         Html.span [] [Html.text subString]
                         ]
                 )

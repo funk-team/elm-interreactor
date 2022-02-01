@@ -4,7 +4,7 @@ import { WebsocketProvider } from 'y-websocket'
 
 const viewState = new Y.Doc()
 
-const wsProvider = new WebsocketProvider('ws://localhost:4321', 'elm-fixer', viewState)
+const wsProvider = new WebsocketProvider('ws://localhost:4321', 'elm-interreactor', viewState)
 
 wsProvider.on('sync', is => {
     const node = document.querySelector("#app")

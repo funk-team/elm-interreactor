@@ -2,7 +2,7 @@
   "author": "Jan Wirth <jan@funklang.com>",
   "name": "@funk-team/elm-interreactor",
   "description": "An elm reactor with interactive error messages",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "bin": {
     "elm-interreactor": "./lib/cli.mjs"
   },
@@ -15,7 +15,9 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "start-e2e": "nodemon --verbose --config nodemon.json --exec 'npm run build && ELM_MAIN=src/Client.elm elm-interreactor'"
+
   },
   "repository": {
     "type": "git",
