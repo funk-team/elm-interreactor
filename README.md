@@ -1,6 +1,13 @@
 # Elm interReactor
 An elm reactor that allows you to apply the suggestions included in the report of the elm compiler.
 
+![screenshot of interReactor](interreactor-screenshot.png)
+
+Usage:
+```
+npx @funk-team/elm-interreactor
+```
+
 :warning: **This is experimental software. Please commit your files before using this tool and be aware of the known issues.**
 
 ## Known issues
@@ -14,7 +21,7 @@ Because copying from the output is cumbersome I type the changes manually and ma
 This tool automates the process.
 
 ## Demo (click to play)
-[![screenshot of interReactor](interreactor-screenshot.png)](https://user-images.githubusercontent.com/7485959/120943953-f0a71380-c729-11eb-8db8-e270953bfb0b.mp4)
+[demo](https://user-images.githubusercontent.com/7485959/120943953-f0a71380-c729-11eb-8db8-e270953bfb0b.mp4)
 ## Usage
 ```
 cd same-directory-as-elm-json
