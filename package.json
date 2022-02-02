@@ -2,7 +2,7 @@
   "author": "Jan Wirth <jan@funklang.com>",
   "name": "@funk-team/elm-interreactor",
   "description": "An elm reactor with interactive error messages",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "bin": {
     "elm-interreactor": "./lib/cli.mjs"
   },
